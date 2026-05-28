@@ -17,6 +17,24 @@
 
   <main class="app">
     <section class="login-view active" id="loginView">
+      <div class="login-products" aria-hidden="true">
+        <span class="lp1">🥬</span>
+        <span class="lp2">🍎</span>
+        <span class="lp3">🥛</span>
+        <span class="lp4">🥕</span>
+        <span class="lp5">🍞</span>
+        <span class="lp6">🥑</span>
+        <span class="lp7">🍫</span>
+        <span class="lp8">🧃</span>
+      </div>
+      <div class="counter-products" aria-hidden="true">
+        <div class="counter-left">
+          <span>🥫</span><span>🍪</span><span>🍚</span><span>🧂</span><span>🫒</span>
+        </div>
+        <div class="counter-right">
+          <span>🥕</span><span>🍅</span><span>🍯</span><span>🍎</span><span>🥦</span><span>🍋</span>
+        </div>
+      </div>
       <div class="login-card">
         <div class="brand">
           <span class="brand-icon">🛒</span>
@@ -50,7 +68,6 @@
         </div>
         <nav>
           <button class="nav active" data-page="home">⌂ Home</button>
-          <button class="nav" data-page="catalog">▦ Product Catalog</button>
           <button class="nav" data-page="productmenu">▣ Product Menu</button>
           <button class="nav" data-page="recommend">✦ AI Recommendation</button>
           <button class="nav" data-page="cart">🛒 Shopping Cart</button>
@@ -101,11 +118,11 @@
             <article class="quick-menu-panel">
               <div class="section-title compact-title"><h2>Product Menu Quick-Access</h2><button class="soft jump" data-page="productmenu">All</button></div>
               <div class="mini-departments">
-                <button data-menu-category="Dairy">🥛<span>Dairy</span></button>
-                <button data-menu-category="Vegetables">🥬<span>Produce</span></button>
-                <button data-menu-category="Bakery">🍞<span>Bakery</span></button>
-                <button data-menu-category="Meats">🥩<span>Meat</span></button>
-                <button data-menu-category="Snacks">🍫<span>Snacks</span></button>
+                <button class="jump" data-page="productmenu">🥛<span>Dairy</span></button>
+                <button class="jump" data-page="productmenu">🥬<span>Produce</span></button>
+                <button class="jump" data-page="productmenu">🍞<span>Bakery</span></button>
+                <button class="jump" data-page="productmenu">🥩<span>Meat</span></button>
+                <button class="jump" data-page="productmenu">🍫<span>Snacks</span></button>
               </div>
             </article>
             <article class="recipes-panel">
@@ -128,15 +145,10 @@
           </div>
         </section>
 
-        <section class="page" id="catalog">
-          <div class="section-title"><div><h2>Product Catalog</h2><p>Browse cute animated grocery items.</p></div><select id="categoryFilter"></select></div>
-          <div class="product-grid" id="productGrid"></div>
-        </section>
-
         <section class="page" id="productmenu">
           <div class="section-title">
-            <div><h2>Product Menu</h2><p>Quick-access menu for every grocery department.</p></div>
-            <button class="soft jump" data-page="catalog">Open Full Catalog</button>
+            <div><h2>Products</h2><p>Browse everything in one place.</p></div>
+            <button class="soft" id="showAllProducts" type="button">Show All</button>
           </div>
           <div class="menu-grid" id="productMenu"></div>
         </section>
@@ -189,7 +201,7 @@
 
         <section class="page" id="admindash">
           <h2>Admin Dashboard</h2>
-          <div class="quick-stats"><article><b>1,245</b><span>Users</span></article><article><b>2,356</b><span>Orders</span></article><article><b>₱245k</b><span>Sales</span></article><article><b>36</b><span>Products</span></article></div>
+          <div class="quick-stats"><article><b>1,245</b><span>Users</span></article><article><b>2,356</b><span>Orders</span></article><article><b>₱245k</b><span>Sales</span></article><article><b>100+</b><span>Products</span></article></div>
           <div class="panel-grid"><article><h3>Sales Overview</h3><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></article><article><h3>Top Products</h3><p>Banana Cavendish</p><p>Chicken Breast</p><p>Milk 1L</p><p>Broccoli</p></article></div>
         </section>
 
@@ -227,9 +239,9 @@
         <section class="page" id="settings">
           <h2>Settings</h2>
           <form class="settings-form">
-            <label>Full Name<input value="Maria Santos"></label>
-            <label>Email<input value="maria@groceryai.com"></label>
-            <label>Phone<input value="+63 912 345 6789"></label>
+            <label>Full Name<input value="Catherine Doming"></label>
+            <label>Email<input value="domincatherine@gmail.com"></label>
+            <label>Phone<input value="+63 970251770"></label>
             <label>Theme<select><option>Cute Pastel Grocery</option><option>Warm Brown</option></select></label>
             <button class="primary" type="button">Save Changes</button>
           </form>
@@ -239,7 +251,7 @@
           <h2>Contact Us</h2>
           <div class="contact-grid">
             <form><input placeholder="Your name"><input placeholder="Email address"><textarea placeholder="Message"></textarea><button class="primary" type="button">Send Message</button></form>
-            <article><h3>Support</h3><p>☎ +63 912 345 6709</p><p>✉ support@groceryai.com</p><p>⌖ Manila, Philippines</p></article>
+            <article><h3>Support</h3><p>☎ +63 9700251770</p><p>✉ support@groceryai.com</p><p>⌖ Manila, Philippines</p></article>
           </div>
         </section>
       </section>

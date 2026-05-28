@@ -39,12 +39,32 @@ const products = [
   ["Nacho Chips", 92, "/ bag", "🌮", "Junk Foods"], ["Instant Noodles", 45, "/ pack", "🍜", "Junk Foods"],
   ["Soda Can", 42, "/ can", "🥤", "Junk Foods"], ["Gummy Candy", 60, "/ pouch", "🍬", "Junk Foods"],
   ["Chocolate Donut", 55, "/ piece", "🍩", "Junk Foods"], ["Mixed Nuts", 190, "/ pouch", "🥜", "Snacks"],
-  ["Baby Wipes", 115, "", "🧸", "Baby Care"]
+  ["Granola Bars", 135, "/ box", "🍯", "Snacks"], ["Trail Mix", 155, "/ pouch", "🥜", "Snacks"],
+  ["Pretzels", 88, "/ bag", "🥨", "Snacks"], ["Crackers", 78, "/ box", "🍘", "Snacks"],
+  ["Baby Wipes", 115, "", "🧸", "Baby Care"], ["Baby Shampoo", 145, "/ bottle", "🧴", "Baby Care"],
+  ["Baby Powder", 95, "/ bottle", "🍼", "Baby Care"], ["Diapers Small", 365, "/ pack", "🧷", "Baby Care"],
+  ["Lettuce Head", 68, "/ head", "🥬", "Vegetables"], ["Green Beans", 72, "/ pack", "🫛", "Vegetables"],
+  ["Garlic", 35, "/ pack", "🧄", "Vegetables"], ["Onions", 58, "/ kg", "🧅", "Vegetables"],
+  ["Pineapple", 95, "/ piece", "🍍", "Fruits"], ["Mango", 120, "/ kg", "🥭", "Fruits"],
+  ["Blueberries", 210, "/ box", "🫐", "Fruits"], ["Lemon", 65, "/ pack", "🍋", "Fruits"],
+  ["Tilapia", 180, "/ kg", "🐟", "Seafood"], ["Squid Rings", 240, "/ pack", "🦑", "Seafood"],
+  ["Crab Sticks", 135, "/ pack", "🦀", "Seafood"], ["Bangus", 210, "/ kg", "🐟", "Seafood"],
+  ["Sliced Bread", 72, "/ loaf", "🍞", "Bakery"], ["Pandesal", 45, "/ pack", "🥖", "Bakery"],
+  ["Bagels", 125, "/ pack", "🥯", "Bakery"], ["Muffins", 155, "/ box", "🧁", "Bakery"],
+  ["Brown Rice 5kg", 340, "/ sack", "🍚", "Pantry"], ["Canned Tuna", 58, "/ can", "🥫", "Pantry"],
+  ["Tomato Sauce", 42, "/ pack", "🥫", "Pantry"], ["Peanut Butter", 165, "/ jar", "🥜", "Pantry"],
+  ["Green Tea", 120, "/ box", "🍵", "Beverages"], ["Bottled Water", 95, "/ pack", "💧", "Beverages"],
+  ["Apple Juice", 105, "/ bottle", "🧃", "Beverages"], ["Cocoa Drink", 115, "/ pack", "☕", "Beverages"],
+  ["Fabric Softener", 180, "/ bottle", "🧴", "Materials"], ["Floor Cleaner", 145, "/ bottle", "🧽", "Materials"],
+  ["Toilet Paper", 165, "/ pack", "🧻", "Materials"], ["Zip Bags", 95, "/ box", "🛍️", "Materials"],
+  ["Mouthwash", 160, "/ bottle", "🪥", "Hygienes"], ["Face Mask", 85, "/ pack", "😷", "Hygienes"],
+  ["Deodorant", 118, "/ stick", "🧴", "Hygienes"], ["Lotion", 175, "/ bottle", "🧴", "Hygienes"]
 ].map(([name, price, unit, icon, category]) => ({ name, price, unit, icon, category }));
 
 const menuCategories = [...new Set(products.map(product => product.category))];
 
 let role = "User";
+let selectedMenuCategory = "";
 let cart = [
   { ...products[0], qty: 1 },
   { ...products[8], qty: 2 },
@@ -66,35 +86,29 @@ function productCard(product) {
 }
 
 function renderProducts() {
-  const category = byId("categoryFilter").value;
   const query = byId("searchInput").value.trim().toLowerCase();
-  const list = products.filter(product => {
-    const matchesCategory = category === "All Categories" || product.category === category;
-    const matchesSearch = !query || `${product.name} ${product.category}`.toLowerCase().includes(query);
-    return matchesCategory && matchesSearch;
-  });
-  byId("productGrid").innerHTML = list.map(productCard).join("");
   byId("recommendGrid").innerHTML = [products[25], products[20], products[1], products[14], products[9], products[11]].map(productCard).join("");
 }
 
 function renderProductMenu() {
-  byId("productMenu").innerHTML = menuCategories.map(category => {
-    const items = products.filter(product => product.category === category);
-    return `<article class="menu-card">
-      <div class="menu-card-head">
-        <h3>${category}</h3>
-        <button data-menu-category="${category}">View</button>
+  const query = byId("searchInput").value.trim().toLowerCase();
+  const items = products.filter(product => {
+    const matchesSearch = !query || `${product.name} ${product.category}`.toLowerCase().includes(query);
+    return matchesSearch;
+  });
+  byId("productMenu").innerHTML = `<div class="shop-grid">
+    ${items.map(item => `<article class="shop-card">
+      <button class="favorite" type="button" aria-label="Save ${item.name}">♡</button>
+      <div class="shop-art">${item.icon}</div>
+      <span class="shop-category">${item.category}</span>
+      <h3>${item.name}</h3>
+      <p>${peso(item.price)} ${item.unit}</p>
+      <div class="shop-actions">
+        <div class="mini-qty"><button type="button">−</button><span>1</span><button type="button">+</button></div>
+        <button class="cart-add" data-add="${item.name}" type="button">🛒 Add</button>
       </div>
-      <div class="menu-items">
-        ${items.map(item => `<button data-add="${item.name}"><span>${item.icon}</span><b>${item.name}</b><small>${peso(item.price)} ${item.unit}</small></button>`).join("")}
-      </div>
-    </article>`;
-  }).join("");
-}
-
-function renderCategories() {
-  const categories = ["All Categories", ...new Set(products.map(product => product.category))];
-  byId("categoryFilter").innerHTML = categories.map(category => `<option>${category}</option>`).join("");
+    </article>`).join("") || `<article class="empty-products">No products found. Try another search or show all products.</article>`}
+  </div>`;
 }
 
 function renderCart() {
@@ -135,8 +149,16 @@ byId("logoutBtn").addEventListener("click", () => {
   byId("loginView").classList.add("active");
 });
 
-byId("categoryFilter").addEventListener("change", renderProducts);
-byId("searchInput").addEventListener("input", renderProducts);
+byId("searchInput").addEventListener("input", () => {
+  selectedMenuCategory = "";
+  renderProductMenu();
+  renderProducts();
+});
+byId("showAllProducts").addEventListener("click", () => {
+  selectedMenuCategory = "";
+  byId("searchInput").value = "";
+  renderProductMenu();
+});
 byId("clearCart").addEventListener("click", () => {
   cart = [];
   renderCart();
@@ -148,14 +170,15 @@ document.addEventListener("click", event => {
 
   const menuButton = event.target.closest("[data-menu-category]");
   if (menuButton) {
-    byId("categoryFilter").value = menuButton.dataset.menuCategory;
-    renderProducts();
-    showPage("catalog");
+    selectedMenuCategory = "";
+    renderProductMenu();
+    showPage("productmenu");
   }
 
   const addButton = event.target.closest("[data-add]");
   if (addButton) {
     const product = products.find(item => item.name === addButton.dataset.add);
+    if (!product) return;
     const existing = cart.find(item => item.name === product.name);
     if (existing) existing.qty += 1;
     else cart.push({ ...product, qty: 1 });
@@ -172,7 +195,6 @@ document.addEventListener("click", event => {
   }
 });
 
-renderCategories();
 renderProducts();
 renderProductMenu();
 renderCart();
