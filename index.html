@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personalized Grocery AI System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="bg-scene" aria-hidden="true">
+    <span class="float f1">🍓</span><span class="float f2">🥑</span><span class="float f3">🥐</span>
+    <span class="float f4">🥕</span><span class="float f5">🍞</span><span class="float f6">🧃</span>
+  </div>
+
+  <main class="app">
+    <section class="login-view active" id="loginView">
+      <div class="login-card">
+        <div class="brand">
+          <span class="brand-icon">🛒</span>
+          <div>
+            <strong>Personalized Grocery</strong>
+            <small>AI System</small>
+          </div>
+        </div>
+        <h1>Welcome back</h1>
+        <p>Plan meals, shop smarter, and track everything in one cozy grocery space.</p>
+        <div class="role-switch">
+          <button class="active" data-role="User" type="button">User Login</button>
+          <button data-role="Admin" type="button">Admin Login</button>
+        </div>
+        <form id="loginForm">
+          <input value="maria@groceryai.com" aria-label="Email or username" />
+          <input value="password" type="password" aria-label="Password" />
+          <button class="primary" type="submit">Enter System</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="system-view" id="systemView">
+      <aside class="sidebar">
+        <div class="brand compact">
+          <span class="brand-icon">🧺</span>
+          <div>
+            <strong>Grocery AI</strong>
+            <small id="activeRole">User Mode</small>
+          </div>
+        </div>
+        <nav>
+          <button class="nav active" data-page="home">⌂ Home</button>
+          <button class="nav" data-page="catalog">▦ Product Catalog</button>
+          <button class="nav" data-page="productmenu">▣ Product Menu</button>
+          <button class="nav" data-page="recommend">✦ AI Recommendation</button>
+          <button class="nav" data-page="cart">🛒 Shopping Cart</button>
+          <button class="nav" data-page="meal">🍽 Meal Planner</button>
+          <button class="nav" data-page="userdash">♡ User Dashboard</button>
+          <button class="nav" data-page="admindash">◎ Admin Dashboard</button>
+          <button class="nav" data-page="budget">₱ Budget Tracking</button>
+          <button class="nav" data-page="notifications">🔔 Notifications</button>
+          <button class="nav" data-page="settings">⚙ Settings</button>
+          <button class="nav" data-page="contact">☎ Contact Us</button>
+        </nav>
+        <button class="logout" id="logoutBtn">Logout</button>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <strong>Personalized Grocery AI System</strong>
+            <span>Fresh picks and smart planning for today</span>
+          </div>
+          <label class="search">
+            <input id="searchInput" placeholder="Search products, meals, orders..." />
+            <span>⌕</span>
+          </label>
+          <div class="top-icons"><button>🔔</button><button>🛒</button><button>👩</button></div>
+        </header>
+
+        <section class="page active" id="home">
+          <div class="shopping-board">
+            <article class="planner-panel">
+              <div class="section-title compact-title"><h2>Weekly AI Meal Planner</h2><button class="soft jump" data-page="meal">Open</button></div>
+              <div class="week-strip">
+                <span><b>Mon</b>🥙</span><span><b>Tue</b>🍲</span><span><b>Wed</b>🥪</span><span><b>Thu</b>🥗</span><span><b>Fri</b>🍛</span><span><b>Sat</b>🥣</span>
+              </div>
+              <div class="today-meal">
+                <strong>🥘</strong>
+                <div><b>Today's Meal</b><p>Veggie pasta bake with fresh salad and fruit.</p></div>
+                <button class="primary jump" data-page="cart">Approve Plan</button>
+              </div>
+            </article>
+            <article class="smart-list">
+              <div class="section-title compact-title"><h2>Your Smart Shopping List</h2><button class="soft jump" data-page="cart">Cart</button></div>
+              <label><input type="checkbox"> <span>🥛 Milk</span><em>Smart-added</em></label>
+              <label><input type="checkbox"> <span>🥬 Organic Kale</span><em>Smart-added</em></label>
+              <label><input type="checkbox"> <span>🥑 Avocados (3pk)</span><em>Smart-added</em></label>
+              <p class="cost-line"><span>Estimated Cost</span><b>₱304.00</b></p>
+            </article>
+            <article class="quick-menu-panel">
+              <div class="section-title compact-title"><h2>Product Menu Quick-Access</h2><button class="soft jump" data-page="productmenu">All</button></div>
+              <div class="mini-departments">
+                <button data-menu-category="Dairy">🥛<span>Dairy</span></button>
+                <button data-menu-category="Vegetables">🥬<span>Produce</span></button>
+                <button data-menu-category="Bakery">🍞<span>Bakery</span></button>
+                <button data-menu-category="Meats">🥩<span>Meat</span></button>
+                <button data-menu-category="Snacks">🍫<span>Snacks</span></button>
+              </div>
+            </article>
+            <article class="recipes-panel">
+              <h2>Recent Recipes</h2>
+              <div class="recipe-row"><span>🥗<b>Quinoa Salmon Salad</b></span><span>🌮<b>Black Bean Tacos</b></span><span>🍪<b>Oatmeal Bars</b></span></div>
+            </article>
+            <article class="budget-mini">
+              <h2>Monthly Budget Tracking</h2>
+              <div class="budget-meter"><span></span></div>
+              <p><span>Budget Goal</span><b>₱1,200</b></p><p><span>Spent</span><b>₱945</b></p><p><span>Remaining</span><b>₱255</b></p>
+            </article>
+            <article class="pantry-panel">
+              <h2>Pantry Status</h2>
+              <div class="pantry-items"><span>🍝<b>70%</b><small>Pasta</small></span><span>🌾<b>30%</b><small>Flour</small></span><span>🥣<b>90%</b><small>Cereal</small></span><span>🍚<b>85%</b><small>Rice</small></span></div>
+            </article>
+            <article class="reorder-panel">
+              <h2>Quick Reorder</h2>
+              <div class="reorder-items"><button>🧻 Paper Towels</button><button>🧼 Cleaning Wipes</button><button>🧴 Laundry Detergent</button></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="catalog">
+          <div class="section-title"><div><h2>Product Catalog</h2><p>Browse cute animated grocery items.</p></div><select id="categoryFilter"></select></div>
+          <div class="product-grid" id="productGrid"></div>
+        </section>
+
+        <section class="page" id="productmenu">
+          <div class="section-title">
+            <div><h2>Product Menu</h2><p>Quick-access menu for every grocery department.</p></div>
+            <button class="soft jump" data-page="catalog">Open Full Catalog</button>
+          </div>
+          <div class="menu-grid" id="productMenu"></div>
+        </section>
+
+        <section class="page" id="recommend">
+          <div class="split">
+            <div class="ai-card">
+              <span class="bot">🤖</span>
+              <h2>AI Recommendation</h2>
+              <p>Recommended from your budget, previous orders, and balanced meal preferences.</p>
+              <div class="chips"><span>High Protein</span><span>Budget Friendly</span><span>Fresh Produce</span><span>Low Sugar</span></div>
+            </div>
+            <div class="product-grid small" id="recommendGrid"></div>
+          </div>
+        </section>
+
+        <section class="page" id="cart">
+          <div class="section-title"><h2>Shopping Cart</h2><button class="soft" id="clearCart">Clear Cart</button></div>
+          <div class="cart-layout">
+            <div class="cart-list" id="cartList"></div>
+            <aside class="summary">
+              <h3>Order Summary</h3>
+              <p><span>Subtotal</span><b id="subtotal">₱0.00</b></p>
+              <p><span>Delivery</span><b>₱40.00</b></p>
+              <p><span>AI Savings</span><b>-₱25.00</b></p>
+              <hr>
+              <p class="total"><span>Total</span><b id="cartTotal">₱0.00</b></p>
+              <button class="primary">Checkout</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="meal">
+          <div class="section-title"><h2>Meal Planner</h2><button class="soft">Generate New Plan</button></div>
+          <div class="meal-grid">
+            <article><b>Mon</b><span>🥣 Oatmeal Fruits</span><span>🥗 Chicken Salad</span><span>🐟 Salmon Veggies</span></article>
+            <article><b>Tue</b><span>🍳 Egg Toast</span><span>🌮 Bean Tacos</span><span>🍝 Veggie Pasta</span></article>
+            <article><b>Wed</b><span>🍌 Yogurt Bowl</span><span>🍚 Beef Rice Bowl</span><span>🥬 Quinoa Salad</span></article>
+            <article><b>Thu</b><span>🥐 Cheese Croissant</span><span>🍗 Chicken Wrap</span><span>🍤 Shrimp Stir Fry</span></article>
+            <article><b>Fri</b><span>🍓 Smoothie</span><span>🥑 Avocado Toast</span><span>🥩 Beef Strips</span></article>
+            <aside class="ingredients"><h3>Ingredients Needed</h3><p>Oats, bananas, chicken breast, salmon, lettuce, rice, eggs, tomatoes, yogurt.</p><button class="primary">Add Meal Items to Cart</button></aside>
+          </div>
+        </section>
+
+        <section class="page" id="userdash">
+          <h2>User Dashboard</h2>
+          <div class="quick-stats"><article><b>12</b><span>Orders</span></article><article><b>8</b><span>Wishlist</span></article><article><b>5</b><span>Saved Recipes</span></article><article><b>320</b><span>Points</span></article></div>
+          <div class="panel-grid"><article><h3>Recent Orders</h3><p>#12345 Delivered ₱425</p><p>#12344 Delivered ₱700</p><p>#12343 Processing ₱340</p></article><article><h3>Personal Info</h3><p>Maria Santos</p><p>maria@groceryai.com</p><p>+63 912 345 6789</p></article></div>
+        </section>
+
+        <section class="page" id="admindash">
+          <h2>Admin Dashboard</h2>
+          <div class="quick-stats"><article><b>1,245</b><span>Users</span></article><article><b>2,356</b><span>Orders</span></article><article><b>₱245k</b><span>Sales</span></article><article><b>36</b><span>Products</span></article></div>
+          <div class="panel-grid"><article><h3>Sales Overview</h3><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></article><article><h3>Top Products</h3><p>Banana Cavendish</p><p>Chicken Breast</p><p>Milk 1L</p><p>Broccoli</p></article></div>
+        </section>
+
+        <section class="page" id="budget">
+          <h2>Budget Tracking</h2>
+          <div class="budget-layout">
+            <article class="budget-main">
+              <h3>Monthly Grocery Budget</h3>
+              <div class="budget-meter"><span></span></div>
+              <p><strong>Budget Goal:</strong> ₱12,000</p>
+              <p><strong>Spent This Month:</strong> ₱8,945</p>
+              <p><strong>Remaining:</strong> ₱3,055</p>
+            </article>
+            <article class="budget-breakdown">
+              <h3>Category Spending</h3>
+              <p><span>Vegetables</span><b>₱1,450</b></p>
+              <p><span>Meats</span><b>₱2,380</b></p>
+              <p><span>Dairy</span><b>₱1,120</b></p>
+              <p><span>Junk Foods</span><b>₱790</b></p>
+              <p><span>Hygiene</span><b>₱980</b></p>
+            </article>
+            <article class="budget-tip">
+              <h3>AI Saving Tip</h3>
+              <p>Switch two chocolate and junk-food items to weekly promos to save around ₱255 this week.</p>
+              <button class="primary jump" data-page="recommend">View Smart Picks</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="notifications">
+          <h2>Notifications</h2>
+          <div class="notice-list"><article>✅ Order #12345 is out for delivery.</article><article>🏷 Fruits are 20% off today.</article><article>🥗 Your meal plan is ready.</article><article>♡ Wishlist item is back in stock.</article></div>
+        </section>
+
+        <section class="page" id="settings">
+          <h2>Settings</h2>
+          <form class="settings-form">
+            <label>Full Name<input value="Maria Santos"></label>
+            <label>Email<input value="maria@groceryai.com"></label>
+            <label>Phone<input value="+63 912 345 6789"></label>
+            <label>Theme<select><option>Cute Pastel Grocery</option><option>Warm Brown</option></select></label>
+            <button class="primary" type="button">Save Changes</button>
+          </form>
+        </section>
+
+        <section class="page" id="contact">
+          <h2>Contact Us</h2>
+          <div class="contact-grid">
+            <form><input placeholder="Your name"><input placeholder="Email address"><textarea placeholder="Message"></textarea><button class="primary" type="button">Send Message</button></form>
+            <article><h3>Support</h3><p>☎ +63 912 345 6709</p><p>✉ support@groceryai.com</p><p>⌖ Manila, Philippines</p></article>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+  <script src="/script.js"></script>
+</body>
+</html>

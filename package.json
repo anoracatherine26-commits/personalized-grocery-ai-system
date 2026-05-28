@@ -1,0 +1,10 @@
+{
+  "name": "personalized-grocery-ai-system",
+  "version": "1.0.0",
+  "description": "Personalized Grocery AI System website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "private": true
+}
