@@ -65,12 +65,8 @@ const menuCategories = [...new Set(products.map(product => product.category))];
 
 let role = "User";
 let selectedMenuCategory = "";
-let cart = [
-  { ...products[0], qty: 1 },
-  { ...products[8], qty: 2 },
-  { ...products[14], qty: 1 },
-  { ...products[19], qty: 1 }
-];
+let cart = []; // start empty so it only fills when the user adds/purchases items
+
 let favoriteNames = new Set();
 
 const peso = value => `₱${value.toFixed(2)}`;
@@ -174,8 +170,65 @@ function handleTopIcon(button) {
   if (label === "👩") showPage("settings");
 }
 
+let notifications = []; // { id, message, expiresAt, createdAt }
+
+function formatDate(d) {
+  return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+function computeExpiry(productName) {
+  // simple, deterministic “expiry” rules so every purchased item gets an expiration date
+  const p = findProduct(productName);
+  const category = p?.category || "";
+  const now = new Date();
+  const days = (() => {
+    if (["Fruits", "Vegetables", "Seafood", "Meats"].includes(category)) return 3;
+    if (["Dairy", "Ice Creams"].includes(category)) return 5;
+    return 14; // pantry / beverages / bakery / hygiene / materials / snacks
+  })();
+  return new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+function pushNotification(message, productName) {
+  const expiresAt = computeExpiry(productName);
+  notifications.unshift({
+    id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+    message,
+    createdAt: new Date(),
+    expiresAt
+  });
+  renderNotifications();
+}
+
+function isNotificationExpired(n) {
+  return new Date(n.expiresAt).getTime() < Date.now();
+}
+
+function renderNotifications() {
+  const list = byId("noticeList") || byId("notifications");
+  if (!list) return;
+
+  // remove expired ones from the UI
+  const active = notifications.filter(n => !isNotificationExpired(n));
+  notifications = active;
+
+  if (!active.length) {
+    list.innerHTML = `<article>✨ No new notifications right now.</article>`;
+    return;
+  }
+
+  list.innerHTML = active
+    .slice(0, 8)
+    .map(n => {
+      const exp = formatDate(new Date(n.expiresAt));
+      return `<article>⏳ ${n.message}<br/><small style="color:#8b6b55;font-weight:800">Expires: ${exp}</small></article>`;
+    })
+    .join("");
+}
+
 function handleUtilityButton(button) {
   const label = button.textContent.trim();
+
 
   if (label === "Generate New Plan") {
     showPage("meal");
@@ -189,9 +242,22 @@ function handleUtilityButton(button) {
   }
 
   if (label === "Checkout") {
+    // generate expiring notifications for each purchased cart item
+    const purchased = [...cart];
     cart = [];
+
     renderCart();
     renderProductMenu();
+
+    if (purchased.length) {
+      purchased.forEach(item => {
+        pushNotification(`✅ Purchased: ${item.name} (${item.qty}×)`, item.name);
+      });
+    } else {
+      notifications = [];
+      renderNotifications();
+    }
+
     showPage("notifications");
     return;
   }
@@ -303,3 +369,5 @@ document.addEventListener("click", event => {
 renderProducts();
 renderProductMenu();
 renderCart();
+renderNotifications();
+
