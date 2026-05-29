@@ -38,14 +38,37 @@ body::before {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse at 20% 12%, rgba(255, 241, 207, .55), transparent 40%),
-    radial-gradient(ellipse at 86% 18%, rgba(207, 239, 222, .45), transparent 38%),
-    radial-gradient(ellipse at 70% 80%, rgba(255, 214, 117, .22), transparent 44%),
-    linear-gradient(120deg, rgba(36, 129, 158, .18), rgba(255, 241, 207, .1) 38%, rgba(108, 179, 139, .2));
+    radial-gradient(ellipse at 10% 12%, rgba(255, 244, 220, .70), transparent 45%),
+    radial-gradient(ellipse at 92% 18%, rgba(201, 239, 207, .55), transparent 40%),
+    radial-gradient(ellipse at 75% 82%, rgba(255, 214, 117, .22), transparent 48%),
+    radial-gradient(ellipse at 35% 70%, rgba(140, 201, 159, .18), transparent 45%),
+    linear-gradient(120deg, rgba(36, 129, 158, .18), rgba(255, 241, 207, .10) 38%, rgba(108, 179, 139, .22));
   pointer-events: none;
-  filter: saturate(1.12);
-  opacity: .95;
+  filter: saturate(1.18) contrast(1.03);
+  opacity: .98;
 }
+
+/* cute kitchen backdrop */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -40px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(247, 214, 117, .28) 0 8px, transparent 9px),
+    radial-gradient(circle at 35% 35%, rgba(28, 108, 131, .16) 0 10px, transparent 11px),
+    radial-gradient(circle at 70% 20%, rgba(201, 239, 207, .26) 0 10px, transparent 11px),
+    radial-gradient(circle at 85% 70%, rgba(255, 214, 117, .20) 0 9px, transparent 10px),
+    radial-gradient(circle at 25% 78%, rgba(28, 108, 131, .14) 0 10px, transparent 11px),
+    repeating-linear-gradient(90deg, rgba(63, 41, 31, .10) 0 2px, transparent 2px 22px),
+    repeating-linear-gradient(0deg, rgba(63, 41, 31, .08) 0 2px, transparent 2px 22px);
+  background-blend-mode: multiply, multiply, multiply, multiply, multiply, soft-light, soft-light;
+  filter: blur(0.2px);
+  transform: perspective(800px) rotateX(8deg);
+  opacity: .26;
+}
+
 
 
 .bg-scene { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
@@ -296,14 +319,24 @@ nav { display: grid; gap: 8px; }
 /* keep product/shop tiles aligned neatly */
 .product-card, .shop-card {
   overflow: hidden;
+  display: grid;
 }
 .product-card h4, .shop-card h3 {
   min-height: 20px;
+  line-height: 1.2;
+}
+
+/* prevent boxes from “jumping” due to variable height text */
+.product-card p,
+.shop-card p {
+  min-height: 26px;
+  margin: 6px 0 0;
 }
 
 .notice-list {
   grid-auto-rows: min-content;
 }
+
 
 
 .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 24px; align-items: center; }
