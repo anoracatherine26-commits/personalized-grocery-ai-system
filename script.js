@@ -71,9 +71,45 @@ let cart = [
   { ...products[14], qty: 1 },
   { ...products[19], qty: 1 }
 ];
+let favoriteNames = new Set();
 
 const peso = value => `₱${value.toFixed(2)}`;
 const byId = id => document.getElementById(id);
+const findProduct = name => products.find(item => item.name === name);
+const getCartItem = name => cart.find(item => item.name === name);
+const getCartQty = name => {
+  const item = getCartItem(name);
+  return item ? item.qty : 0;
+};
+
+function addToCartByName(name, qty = 1) {
+  const product = findProduct(name);
+  if (!product) return;
+  const existing = getCartItem(name);
+  if (existing) existing.qty += qty;
+  else cart.push({ ...product, qty });
+  renderCart();
+  renderProductMenu();
+}
+
+function removeFromCartByName(name, qty = 1) {
+  const existing = getCartItem(name);
+  if (!existing) return;
+  existing.qty -= qty;
+  cart = cart.filter(item => item.qty > 0);
+  renderCart();
+  renderProductMenu();
+}
+
+function toggleFavorite(name, button) {
+  if (favoriteNames.has(name)) {
+    favoriteNames.delete(name);
+    button.textContent = "♡";
+  } else {
+    favoriteNames.add(name);
+    button.textContent = "♥";
+  }
+}
 
 function productCard(product) {
   return `<article class="product-card">
@@ -86,7 +122,6 @@ function productCard(product) {
 }
 
 function renderProducts() {
-  const query = byId("searchInput").value.trim().toLowerCase();
   byId("recommendGrid").innerHTML = [products[25], products[20], products[1], products[14], products[9], products[11]].map(productCard).join("");
 }
 
@@ -98,13 +133,17 @@ function renderProductMenu() {
   });
   byId("productMenu").innerHTML = `<div class="shop-grid">
     ${items.map(item => `<article class="shop-card">
-      <button class="favorite" type="button" aria-label="Save ${item.name}">♡</button>
+      <button class="favorite" type="button" aria-label="Save ${item.name}">${favoriteNames.has(item.name) ? "♥" : "♡"}</button>
       <div class="shop-art">${item.icon}</div>
       <span class="shop-category">${item.category}</span>
       <h3>${item.name}</h3>
       <p>${peso(item.price)} ${item.unit}</p>
       <div class="shop-actions">
-        <div class="mini-qty"><button type="button">−</button><span>1</span><button type="button">+</button></div>
+        <div class="mini-qty">
+          <button type="button" data-product="${item.name}" data-change="-1">−</button>
+          <span>${getCartQty(item.name)}</span>
+          <button type="button" data-product="${item.name}" data-change="1">+</button>
+        </div>
         <button class="cart-add" data-add="${item.name}" type="button">🛒 Add</button>
       </div>
     </article>`).join("") || `<article class="empty-products">No products found. Try another search or show all products.</article>`}
@@ -126,6 +165,59 @@ function renderCart() {
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach(page => page.classList.toggle("active", page.id === pageId));
   document.querySelectorAll(".nav").forEach(button => button.classList.toggle("active", button.dataset.page === pageId));
+}
+
+function handleTopIcon(button) {
+  const label = button.textContent.trim();
+  if (label === "🔔") showPage("notifications");
+  if (label === "🛒") showPage("cart");
+  if (label === "👩") showPage("settings");
+}
+
+function handleUtilityButton(button) {
+  const label = button.textContent.trim();
+
+  if (label === "Generate New Plan") {
+    showPage("meal");
+    return;
+  }
+
+  if (label === "Add Meal Items to Cart") {
+    ["Eggs Dozen", "Milk 1L", "Whole Wheat Bread", "Banana Cavendish"].forEach(name => addToCartByName(name));
+    showPage("cart");
+    return;
+  }
+
+  if (label === "Checkout") {
+    cart = [];
+    renderCart();
+    renderProductMenu();
+    showPage("notifications");
+    return;
+  }
+
+  if (label === "Save Changes") {
+    button.textContent = "Saved!";
+    return;
+  }
+
+  if (label === "Send Message") {
+    button.textContent = "Sent!";
+    return;
+  }
+
+  if (button.closest(".reorder-items")) {
+    const reorderMap = {
+      "🧻 Paper Towels": "Paper Towel",
+      "🧼 Cleaning Wipes": "Dishwashing Liquid",
+      "🧴 Laundry Detergent": "Laundry Detergent"
+    };
+    const productName = reorderMap[label];
+    if (productName) {
+      addToCartByName(productName);
+      showPage("cart");
+    }
+  }
 }
 
 document.querySelectorAll("[data-role]").forEach(button => {
@@ -154,45 +246,58 @@ byId("searchInput").addEventListener("input", () => {
   renderProductMenu();
   renderProducts();
 });
+
 byId("showAllProducts").addEventListener("click", () => {
   selectedMenuCategory = "";
   byId("searchInput").value = "";
   renderProductMenu();
 });
+
 byId("clearCart").addEventListener("click", () => {
   cart = [];
   renderCart();
+  renderProductMenu();
 });
 
 document.addEventListener("click", event => {
   const pageButton = event.target.closest("[data-page]");
   if (pageButton) showPage(pageButton.dataset.page);
 
-  const menuButton = event.target.closest("[data-menu-category]");
-  if (menuButton) {
-    selectedMenuCategory = "";
-    renderProductMenu();
-    showPage("productmenu");
-  }
-
   const addButton = event.target.closest("[data-add]");
   if (addButton) {
-    const product = products.find(item => item.name === addButton.dataset.add);
-    if (!product) return;
-    const existing = cart.find(item => item.name === product.name);
-    if (existing) existing.qty += 1;
-    else cart.push({ ...product, qty: 1 });
-    renderCart();
+    addToCartByName(addButton.dataset.add);
     showPage("cart");
+  }
+
+  const productQtyButton = event.target.closest("[data-product]");
+  if (productQtyButton) {
+    const change = Number(productQtyButton.dataset.change);
+    if (change > 0) addToCartByName(productQtyButton.dataset.product, change);
+    else removeFromCartByName(productQtyButton.dataset.product, Math.abs(change));
   }
 
   const qtyButton = event.target.closest("[data-qty]");
   if (qtyButton) {
     const item = cart.find(product => product.name === qtyButton.dataset.qty);
+    if (!item) return;
     item.qty += Number(qtyButton.dataset.change);
     cart = cart.filter(product => product.qty > 0);
     renderCart();
+    renderProductMenu();
   }
+
+  const favoriteButton = event.target.closest(".favorite");
+  if (favoriteButton) {
+    const card = favoriteButton.closest(".shop-card");
+    const title = card?.querySelector("h3")?.textContent;
+    if (title) toggleFavorite(title, favoriteButton);
+  }
+
+  const topIconButton = event.target.closest(".top-icons button");
+  if (topIconButton) handleTopIcon(topIconButton);
+
+  const utilityButton = event.target.closest("button");
+  if (utilityButton) handleUtilityButton(utilityButton);
 });
 
 renderProducts();
